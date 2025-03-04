@@ -5,10 +5,10 @@ local LocalPlayer = Players.LocalPlayer or Players.PlayerAdded:Wait()
 
 local GamesTable = {
     [6061766680] = {
-        Default = "https://api.luarmor.net/files/v3/loaders/e3ebd4aadbd4e1d3b121f66b06102e8e.lua",-- volleyball legends (don't modify nerd)
-        Mobile = "https://api.luarmor.net/files/v3/loaders/8f819170363aa88419a80cc565b6a53c.lua" -- mobile volleyball legends (don't modify nerd)
+        Default = "https://api.luarmor.net/files/v3/loaders/e3ebd4aadbd4e1d3b121f66b06102e8e.lua",
+        Mobile = "https://api.luarmor.net/files/v3/loaders/8f819170363aa88419a80cc565b6a53c.lua"
     },
-    [6931042565] = "https://api.luarmor.net/files/v3/loaders/f5ec84cb8ff1b58ef725bbcc589fac55.lua", -- fight in a school (don't modify nerd)
+    [6931042565] = "https://api.luarmor.net/files/v3/loaders/f5ec84cb8ff1b58ef725bbcc589fac55.lua",
 }
 
 local GameId = game.GameId
@@ -28,8 +28,15 @@ elseif Executor == "Fluxus" then
     LocalPlayer:Kick("The Executor you're using is horrible please don't use this.")
 end
 
-if GameId == 6061766680 and (game:GetService("UserInputService").TouchEnabled or game:GetService("UserInputService").GamepadEnabled) then
-    loadstring(game:HttpGet(Link.Mobile))()
+local finalLink
+if type(Link) == "table" then
+    if game:GetService("UserInputService").TouchEnabled and not game:GetService("UserInputService").KeyboardEnabled then
+        finalLink = Link.Mobile
+    else
+        finalLink = Link.Default
+    end
 else
-    loadstring(game:HttpGet(type(Link) == "table" and Link.Default or Link))()
+    finalLink = Link
 end
+
+loadstring(game:HttpGet(finalLink))()
